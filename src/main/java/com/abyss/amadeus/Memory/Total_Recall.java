@@ -15,7 +15,7 @@ public class Total_Recall {
         this.contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(config.getEmbeddingStore())
                 .embeddingModel(config.getEmbeddingModel())
-                .maxResults(3)
+                .maxResults(5)
                 .minScore(0.70)
                 .build();
     }

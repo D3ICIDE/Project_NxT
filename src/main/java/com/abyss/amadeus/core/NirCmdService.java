@@ -10,8 +10,10 @@ public class NirCmdService {
     // The universal Shape Registry
     private static final Map<String, String> SHAPE_REGISTRY = Map.of(
             "window",  "nircmdc win %1$s process %2$s %3$s", // App manipulation
-            "process", "nircmdc %1$s %2$s",                  // Process manipulation
-            "system",  "nircmdc %1$s %2$s"                   // Hardware/System manipulation
+            "process", "nircmdc %1$s %2$s %3$s",             // Process manipulation
+            "system",  "nircmdc %1$s %2$s %3$s",             // Hardware/System manipulation
+            "web", "nircmd shexec \"%1$s\" \"%2$s\""
+
     );
 
     // Dynamic Prerequisites
@@ -39,6 +41,7 @@ public class NirCmdService {
         // Final Execution
         String finalCmd = String.format(SHAPE_REGISTRY.get(shape), subAction, target, modifier);
         runProcess(finalCmd);
+        System.out.println("[DEBUG]"+finalCmd);
     }
 
     private static void runProcess(String commandString) {

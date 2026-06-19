@@ -1,33 +1,32 @@
 package com.abyss.amadeus.router;
 
-import com.abyss.amadeus.tools.AppControlTool;
+import com.abyss.amadeus.tools.funcTool;
 import com.google.gson.JsonObject;
 import org.java_websocket.WebSocket;
 
-
-import static com.abyss.amadeus.server.commandProcessor.gson;
-
 public class ResponseHandler {
-    public static void responseAttributes(String rawResponse,WebSocket webSocket){
-        JsonObject Response = gson.fromJson(rawResponse,JsonObject.class);
-        String type = Response.get("type").getAsString();
-        String reply = Response.get("reply").getAsString();
-        responseRouter(type,Response,reply,webSocket);
 
-    }
-    public static void responseRouter(String type,JsonObject payload, String reply,WebSocket webSocket){
-        if(type.equalsIgnoreCase("app")){
-            System.out.println("Assigning App Control");
-            AppControlTool appControlTool = new AppControlTool();
-            appControlTool.execute(payload);
+    public static String executeNativeTool(String functionName, JsonObject argumentsJson, String userMessage, WebSocket webSocket) {
+        SkillRegistry.SkillMeta skill = SkillRegistry.getSkill(functionName);
 
+        if (skill == null) {
+            System.err.println("[Router Error]: Unmapped function name: " + functionName);
+            return "{\"status\":\"error\",\"message\":\"Target tool execution vector missing.\"}";
         }
-        else if (type.equalsIgnoreCase("chat")) {
-            webSocket.send(reply);
 
+        try {
+            System.out.println("[ResponseHandler]: Dispatching background execution for -> " + functionName);
+
+            // Uses your SkillRegistry to instantiate the correct tool class
+            funcTool tool = SkillRegistry.createToolInstance(skill, userMessage, webSocket);
+
+            // Directly execute the tool and return its raw string data back to the Orchestrator thread
+            return tool.execute(argumentsJson);
+
+        } catch (Exception e) {
+            System.err.println("[Thread Isolation Alert]: Exception caught during background execution of " + functionName);
+            e.printStackTrace();
+            return "{\"status\":\"error\",\"message\":\"A system exception occurred while running the tool: " + e.getMessage() + "\"}";
         }
-        webSocket.send(reply);
-
     }
-
 }

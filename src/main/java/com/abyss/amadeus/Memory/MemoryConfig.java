@@ -29,9 +29,7 @@ public class MemoryConfig {
         this.embeddingStore = tempEmbeddingStore;
     }
 
-    public Path getStoragePath() {
-        return storagePath;
-    }
+    public Path getStoragePath(){return storagePath;}
 
     public  EmbeddingModel getEmbeddingModel() {
         return embeddingModel;

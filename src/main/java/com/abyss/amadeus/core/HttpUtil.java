@@ -27,6 +27,19 @@ public class HttpUtil {
             return "{\"error\": \"Network failure\"}";
         }
     }
+    public static String sendGET(String url,String name,String value){
+        try{
+            HttpRequest.Builder builder = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header(name, value)
+                    .timeout(Duration.ofSeconds(10))
+                    .GET();
+            return executeRequest(builder.build());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     public static String executeRequest(HttpRequest request) throws java.io.IOException, InterruptedException {
 

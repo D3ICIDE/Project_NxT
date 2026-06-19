@@ -4,17 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class systemPrompt {
-    static File sysprompt = new File("src/main/resources/system_prompt.txt");
-    public systemPrompt setFile(File file) {
-        sysprompt = file;
-        return this;
+public class SystemPrompt {
+    private  String path;
+    private File sysPrompt;
+    public SystemPrompt(String sysPath){
+        this.path = sysPath;
+        if (sysPath != null) {
+            this.sysPrompt = new File(sysPath);
+        }
     }
-    public static String promptLoader(){
+    public String promptLoader(){
         String systemPrompt = null;
         try{
-            if(sysprompt.exists()){
-                systemPrompt = Files.readString(sysprompt.toPath());
+            if(sysPrompt.exists()){
+                systemPrompt = Files.readString(sysPrompt.toPath());
             }
             else{
                 System.out.println("System prompt not found");

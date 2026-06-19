@@ -1,25 +1,33 @@
 package com.abyss.amadeus.server;
 
+import com.abyss.amadeus.tools.BuildToolRegister;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
 
 
+
 public class payLoadBuilder {
+    static final BuildToolRegister toolRegistry = new BuildToolRegister();
+
     public static JsonObject buildPayLoad(String model, String userText, double temperature, String sysPrompt, List<String> relevantContext,JsonArray history)  {
         JsonObject payLoad = new JsonObject();
         payLoad.addProperty("model",model);
         payLoad.addProperty("temperature",temperature);
 
         JsonArray messages = new JsonArray();
+
         //System
         JsonObject SysService = new JsonObject();
         SysService.addProperty("role","system");
         SysService.addProperty("content",sysPrompt);
         messages.add(SysService);
+
         //chatHistory
-        messages.addAll(history);
+        if(!history.isEmpty() && !history.isEmpty()) {
+            messages.addAll(history);
+        }
 
         //User
         JsonObject userService = new JsonObject();
@@ -40,13 +48,11 @@ public class payLoadBuilder {
 
         messages.add(userService);
 
-        //ResponseFormat
-        JsonObject responseFormat = new JsonObject();
-        responseFormat.addProperty("type", "json_object");
-        payLoad.add("response_format", responseFormat);
 
         payLoad.add("messages", messages);
-        System.out.println(payLoad);
+        //System.out.println(payLoad);
+        payLoad.add("tools", toolRegistry.registeration());
+        payLoad.addProperty("tool_choice", "auto");
         return payLoad;
 
 

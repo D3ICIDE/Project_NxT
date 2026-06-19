@@ -3,20 +3,23 @@ import com.abyss.amadeus.Memory.Memorize;
 import com.abyss.amadeus.Memory.MemoryConfig;
 import com.abyss.amadeus.Memory.MemoryHistory;
 import com.abyss.amadeus.Memory.Total_Recall;
-import com.abyss.amadeus.router.ResponseHandler;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
+import com.abyss.amadeus.config.Config;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
-
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import com.abyss.amadeus.core.SystemPrompt;
 
-import static com.abyss.amadeus.server.commandProcessor.processCommand;
 
 public class Server extends WebSocketServer {
-    Gson gson = new Gson();
+    private static final ExecutorService pipelineExecutor = Executors.newCachedThreadPool();
+
+    static SystemPrompt sysPrompt = new SystemPrompt("src/main/resources/system_prompt.md");
+    static String systemPrompt = sysPrompt.promptLoader();
+    String model = Config.mainModel;
      final Memorize ingestor;
      final MemoryConfig memoryConfig;
     private final Total_Recall recall;
@@ -43,26 +46,28 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String userMessage) {
+        Config.setActiveWebSocket(webSocket);
+        Config.setCurrentUserMessage(userMessage);
         System.out.println("User said:-> " + userMessage);
         //Receive the raw response from LLM
-        try {
+        pipelineExecutor.submit(() -> {
+            try {
 
-            JsonArray chatHistory = history.getHistoryAsJson();
-            List<String> relevantContext = recall.getRelevantContext(userMessage);
+                List<String> relevantContext = recall.getRelevantContext(userMessage);
 
-            String rawJsonResponse = processCommand(userMessage,relevantContext,chatHistory);
-
-            //add message for chat history
-            history.addMessage("user", userMessage);
-            history.addMessage("assistant", rawJsonResponse);
-
-            //Execute
-            ResponseHandler.responseAttributes(rawJsonResponse,webSocket);
-            String conversation = userMessage+rawJsonResponse;
-            ingestor.commitInteraction(conversation);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+                ExecutionOrchestrator.handleInteraction(
+                        userMessage,
+                        relevantContext,
+                        history, // Pass the MemoryHistory object itself
+                        systemPrompt,
+                        model,
+                        webSocket,
+                        pipelineExecutor
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
 
 
