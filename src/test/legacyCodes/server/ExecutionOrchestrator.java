@@ -1,7 +1,7 @@
-package amadeus.Legacy.server;
+package amadeus.legacyCodes.server;
 
-import amadeus.Memory.MemoryHistory;
-import amadeus.Legacy.router.ResponseHandler;
+import amadeus.memory.MemoryHistory;
+import amadeus.legacyCodes.router.ResponseHandler;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

@@ -1,4 +1,4 @@
-package amadeus.Legacy;
+package amadeus.legacyCodes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

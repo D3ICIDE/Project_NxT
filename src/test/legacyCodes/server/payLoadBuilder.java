@@ -1,6 +1,6 @@
-package amadeus.Legacy.server;
+package amadeus.legacyCodes.server;
 
-import amadeus.Legacy.BuildToolRegister;
+import amadeus.legacyCodes.BuildToolRegister;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 

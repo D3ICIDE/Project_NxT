@@ -1,4 +1,4 @@
-package amadeus.Legacy.server;
+package amadeus.legacyCodes.server;
 
 import amadeus.config.Config;
 import amadeus.core.HttpUtil;
@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import static amadeus.Legacy.server.payLoadBuilder.buildPayLoad;
+import static amadeus.legacyCodes.server.payLoadBuilder.buildPayLoad;
 import static amadeus.config.Config.*;
 
 

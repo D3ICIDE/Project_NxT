@@ -1,6 +1,6 @@
-package amadeus.Legacy.router;
+package amadeus.legacyCodes.router;
 
-import amadeus.Legacy.funcTool;
+import amadeus.legacyCodes.funcTool;
 import com.google.gson.JsonObject;
 import org.java_websocket.WebSocket;
 

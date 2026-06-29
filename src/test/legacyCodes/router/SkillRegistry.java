@@ -1,6 +1,6 @@
-package amadeus.Legacy.router;
+package amadeus.legacyCodes.router;
 
-import amadeus.Legacy.funcTool;
+import amadeus.legacyCodes.funcTool;
 import org.java_websocket.WebSocket;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
