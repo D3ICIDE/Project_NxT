@@ -47,11 +47,10 @@ public class BrowserControlTool {
         if (page == null) return "No page is currently open.";
 
         try {
-            // Wait for the page network and animations to settle
+
             page.waitForLoadState();
 
-            // Native Playwright Java API optimized specifically for AI consumption!
-            // It returns a YAML tree with unique [ref=...] IDs for clickable elements.
+
             String snapshot = page.ariaSnapshot(new Page.AriaSnapshotOptions()
                     .setMode(AriaSnapshotMode.AI)
                     .setBoxes(true) // Optional: Tells the AI the x/y coordinates and sizes
