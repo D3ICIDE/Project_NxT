@@ -82,15 +82,16 @@ public class AppControlTool {
 
         // 1B. Check Modern Shell & URI Index Second
         String modernKey = index.findKeyInMap(App_Index.modernShellIndex, appName);
-        System.out.println("found in MAP" + modernKey + "App Name" + appName);
+
         if (modernKey != null) {
+            System.out.println("found in MAP" + modernKey + "App Name" + appName);
             String launchTarget = App_Index.modernShellIndex.get(modernKey);
             ProcessBuilder pb = new ProcessBuilder("explorer.exe", "shell:AppsFolder\\" + launchTarget);
 
             System.out.println("[AMADEUS]: " + launchTarget);
             return AppControlToolHelper.spawnProcess(pb, launchTarget);
         } else {
-            return "Failed to open " + appName;
+            return "Application isn't Available on the Device. Do Not Repeat this Tool Call Again. Tell Supervisor to call WebSearchAgent " + appName;
         }
 
     }

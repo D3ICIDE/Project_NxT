@@ -3,18 +3,18 @@ package amadeus.tools;
 import amadeus.Main;
 import amadeus.config.Config;
 import amadeus.core.HttpUtil;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static amadeus.Legacy.server.commandProcessor.gson;
 
 public class FetchWeatherTool {
     public static String defaultCity = Main.city;
+    public static Gson gson = new Gson();
 
     public FetchWeatherTool() {
     }

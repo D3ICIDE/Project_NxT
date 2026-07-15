@@ -24,14 +24,16 @@ public class App_Index {
         pb.redirectErrorStream(true);
 
         try {
+            System.out.println("-----------------------------------------------------------------------");
             System.out.println("Initiating App Indexing:");
-            System.out.println("-------------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------------------");
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
 
             while ((line = reader.readLine()) != null) {
                 // Split with a limit of 4, just in case an app name contains a pipe symbol natively
+
                 if (line.contains("|")) {
                     String[] parts = line.split("\\|", 4);
                     if (parts.length == 4) {
